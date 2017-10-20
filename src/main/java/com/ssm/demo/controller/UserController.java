@@ -38,6 +38,7 @@ public class UserController {
         return new AjaxResult(obj);
     }
 
+    ////ResponsBody 可以自动将参数封装到对象上，前提是参数名称和对象属性名称相同
     @ResponseBody
     @RequestMapping("/queryList")
     public AjaxResult queryList(User user){

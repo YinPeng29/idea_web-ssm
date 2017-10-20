@@ -23,13 +23,13 @@
     </select>
 
     <select id="selectPage" resultType="map">
-        SELECT u.id, u.username, u.password, u.email, u.useable, u.addtime, u.login_time logintime, u.login_ip loginip FROM t_user u where 1 = 1
-        <if test="null != item.username and '' != item.username"> and u.username like CONCAT('%', #{item.username}, '%')</if>
-        <if test="null != item.email and '' != item.email"> and u.email = #{item.email}</if>
+        SELECT * FROM t_user  where 1 = 1
+        <if test="null != item.username and '' != item.username"> and username like CONCAT('%', #{item.username}, '%')</if>
+        <if test="null != item.email and '' != item.email"> and email = #{item.email}</if>
         limit #{page.startRow}, #{page.pageSize}
     </select>
 
-    <insert id="save" keyProperty="id" useGeneratedKeys="true">
+    <insert id="save">
         insert into t_user(username, password, email, useable, addtime)
         values(#{item.username}, #{item.password}, #{item.email}, #{item.useable}, now())
     </insert>

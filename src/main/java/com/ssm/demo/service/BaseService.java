@@ -8,10 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.ssm.demo.common.pojo.PageAjax;
 import com.ssm.demo.mapper.BaseMapper;
 
-/**
- * 通用业务层
- * @author 蔡泽华
- */
+
 public class BaseService<T> {
 
     @Autowired
