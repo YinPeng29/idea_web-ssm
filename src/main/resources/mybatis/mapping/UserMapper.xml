@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssm.demo.mapper.UserMapper">
+    <select id="selectById" resultType="map">
+        SELECT * FROM t_user  where id = #{id}
+    </select>
+
+    <select id="selectOne" resultType="user">
+        SELECT u.id, u.username, u.password, u.email, u.useable, u.addtime, u.login_time logintime, u.login_ip loginip FROM t_user u where 1 = 1
+        <if test="null != item.id"> and u.id = #{item.id}</if>
+        <if test="null != item.username"> and u.username = #{item.username}</if>
+        <if test="null != item.email"> and u.email = #{item.email}</if>
+    </select>
+
+    <select id="selectList" resultType="map">
+        SELECT * FROM t_user u
+        <where>
+            <if test="null != item.username and '' != item.username"> and u.username like CONCAT('%', #{item.username}, '%')</if>
+            <if test="null != item.email and '' != item.email"> and u.email like CONCAT('%', #{item.email}, '%')</if>
+        </where>
+    </select>
+
+    <select id="selectPage" resultType="map">
+        SELECT u.id, u.username, u.password, u.email, u.useable, u.addtime, u.login_time logintime, u.login_ip loginip FROM t_user u where 1 = 1
+        <if test="null != item.username and '' != item.username"> and u.username like CONCAT('%', #{item.username}, '%')</if>
+        <if test="null != item.email and '' != item.email"> and u.email = #{item.email}</if>
+        limit #{page.startRow}, #{page.pageSize}
+    </select>
+
+    <insert id="save" keyProperty="id" useGeneratedKeys="true">
+        insert into t_user(username, password, email, useable, addtime)
+        values(#{item.username}, #{item.password}, #{item.email}, #{item.useable}, now())
+    </insert>
+
+    <update id="batchSave">
+        insert into t_user(username, password, email, useable, addtime) values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.username}, #{item.password}, #{item.email}, #{item.useable}, now())
+        </foreach>
+    </update>
+
+    <update id="update">
+        update t_user set password = #{item.password}, email = #{item.email}, useable = #{item.useable} where id = #{item.id}
+    </update>
+
+    <update id="batchUpdate">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            update t_user set password = #{item.password}, email = #{item.email}, useable = #{item.useable} where id = #{item.id}
+        </foreach>
+    </update>
+
+    <delete id="delArray">
+        delete from t_user where id in
+        <foreach collection="array" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <delete id="delList">
+        delete from t_user where id in
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+</mapper>

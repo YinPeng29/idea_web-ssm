@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssm.demo.mapper.IMemberOrdersMapper">
+    <resultMap id="BaseResultMap" type="com.ssm.demo.model.IMemberOrders">
+        <id column="oid" jdbcType="BIGINT" property="oid" />
+        <result column="ordercode" jdbcType="VARCHAR" property="ordercode" />
+        <result column="nickname" jdbcType="VARCHAR" property="nickname" />
+        <result column="shopname" jdbcType="VARCHAR" property="shopname" />
+        <result column="buycount" jdbcType="SMALLINT" property="buycount" />
+        <result column="paycount" jdbcType="DECIMAL" property="paycount" />
+        <result column="buytime" jdbcType="VARCHAR" property="buytime" />
+    </resultMap>
+    <sql id="sql_columns">
+        oid,ordercode,nickname,shopname,buycount,paycount,buytime
+    </sql>
+    <sql id="sql_where">
+        <where>
+            <if test="null != item.oid and '' != item.oid">and oid = #{item.oid}</if>
+            <if test="null != item.ordercode and '' != item.ordercode">and ordercode = #{item.ordercode}</if>
+            <if test="null != item.nickname and '' != item.nickname">and nickname = #{item.nickname}</if>
+            <if test="null != item.shopname and '' != item.shopname">and shopname = #{item.shopname}</if>
+            <if test="null != item.buycount and '' != item.buycount">and buycount = #{item.buycount}</if>
+            <if test="null != item.paycount and '' != item.paycount">and paycount = #{item.paycount}</if>
+            <if test="null != item.buytime and '' != item.buytime">and buytime = #{item.buytime}</if>
+        </where>
+    </sql>
+    <select id="selectById" resultMap="BaseResultMap">
+        select <include refid="sql_columns" /> from i_member_orders where oid = #{oid}
+    </select>
+    <select id="selectOne" resultMap="BaseResultMap">
+        select <include refid="sql_columns" /> from i_member_orders <include refid="sql_where" />
+    </select>
+    <select id="selectList" resultMap="BaseResultMap">
+        select <include refid="sql_columns" /> from i_member_orders <include refid="sql_where" />
+    </select>
+    <select id="selectPage" resultMap="BaseResultMap">
+        select <include refid="sql_columns" /> from i_member_orders <include refid="sql_where" /> limit #{page.startRow}, #{page.pageSize}
+    </select>
+    <sql id="sql_save_columns">
+        insert into i_member_orders(
+        <if test="null != item.ordercode"> ordercode</if>
+        <if test="null != item.nickname">, nickname</if>
+        <if test="null != item.shopname">, shopname</if>
+        <if test="null != item.buycount">, buycount</if>
+        <if test="null != item.paycount">, paycount</if>
+        <if test="null != item.buytime">, buytime</if>
+        ) values
+    </sql>
+    <sql id="sql_save_values">
+        (
+        <if test="null != item.ordercode"> #{item.ordercode}</if>
+        <if test="null != item.nickname">, #{item.nickname}</if>
+        <if test="null != item.shopname">, #{item.shopname}</if>
+        <if test="null != item.buycount">, #{item.buycount}</if>
+        <if test="null != item.paycount">, #{item.paycount}</if>
+        <if test="null != item.buytime">, #{item.buytime}</if>
+        )
+    </sql>
+    <insert id="save" keyProperty="item.oid" useGeneratedKeys="true">
+        <include refid="sql_save_columns" /><include refid="sql_save_values" />
+    </insert>
+    <insert id="batchSave">
+        <foreach collection="list" index="index" item="item" open="" separator=";" close="">
+            <include refid="sql_save_columns" /><include refid="sql_save_values" />
+        </foreach>
+    </insert>
+    <sql id="sql_update">
+        update i_member_orders set oid = #{item.oid}
+        <if test="null != item.ordercode">, ordercode = #{item.ordercode}</if>
+        <if test="null != item.nickname">, nickname = #{item.nickname}</if>
+        <if test="null != item.shopname">, shopname = #{item.shopname}</if>
+        <if test="null != item.buycount">, buycount = #{item.buycount}</if>
+        <if test="null != item.paycount">, paycount = #{item.paycount}</if>
+        <if test="null != item.buytime">, buytime = #{item.buytime}</if>
+        where oid = #{item.oid}
+    </sql>
+    <update id="update">
+        <include refid="sql_update" />
+    </update>
+    <update id="batchUpdate">
+        <foreach collection="list" index="index" item="item" open="" separator=";" close="">
+            <include refid="sql_update" />
+        </foreach>
+    </update>
+    <delete id="delArray">
+        delete from i_member_orders where oid in
+        <foreach collection="array" index="index" item="item" open="(" separator="," close=")">#{item}</foreach>
+    </delete>
+    <delete id="delList">
+        delete from i_member_orders where oid in
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">#{item}</foreach>
+    </delete>
+</mapper>
