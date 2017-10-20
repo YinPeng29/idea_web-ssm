@@ -22,6 +22,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    //ResponsBody 自动映射到字段上 前提是字段要相同
     @ResponseBody
     @RequestMapping("/queryById")
     public AjaxResult queryById(int id){
